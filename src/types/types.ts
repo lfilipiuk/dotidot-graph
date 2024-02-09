@@ -3,6 +3,7 @@ import { Node } from "reactflow";
 type SharedNodeData = {
   id: string;
   label: string;
+  borderColor: string;
   __typename: string;
 };
 
@@ -59,12 +60,20 @@ export type VariableNodeData = SharedNodeData & {
 };
 
 export type FeedExportNode = Node<FeedExportNodeData>;
-export type AdditionalSourceNode = Node<AdditionalSourceNodeData, 'object'>;
-export type CampaignSettingNode = Node<CampaignSettingNodeData, 'object'>;
-export type AdwordsSettingNode = Node<AdwordsSettingNodeData, 'object'>;
-export type KeywordSettingNode = Node<KeywordSettingNodeData, 'object'>;
-export type BaseAdTextNode = Node<BaseAdTextNodeData, 'object'>;
-export type BidRuleNode = Node<BidRuleNodeData, 'object'>;
-export type VariableNode = Node<VariableNodeData, 'object'>;
+export type AdditionalSourceNode = Node<AdditionalSourceNodeData, "object">;
+export type CampaignSettingNode = Node<CampaignSettingNodeData, "object">;
+export type AdwordsSettingNode = Node<AdwordsSettingNodeData, "object">;
+export type KeywordSettingNode = Node<KeywordSettingNodeData, "object">;
+export type BaseAdTextNode = Node<BaseAdTextNodeData, "object">;
+export type BidRuleNode = Node<BidRuleNodeData, "object">;
+export type VariableNode = Node<VariableNodeData, "object">;
 
-export type DotiNode = FeedExportNode | AdditionalSourceNode | CampaignSettingNode | AdwordsSettingNode | KeywordSettingNode | BaseAdTextNode | BidRuleNode | VariableNode;
+export type DotiNode =
+  | FeedExportNode
+  | AdditionalSourceNode
+  | CampaignSettingNode
+  | AdwordsSettingNode
+  | KeywordSettingNode
+  | BaseAdTextNode
+  | BidRuleNode
+  | VariableNode;
