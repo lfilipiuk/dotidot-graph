@@ -22,7 +22,10 @@ const CustomNode: FC<NodeProps> = (props: NodeProps) => {
       <div className="flex items-center py-2 px-3">
         <Handle type="target" position={Position.Left} />
 
-        <HoverCard>
+        <HoverCard
+        openDelay={100}
+        closeDelay={0}
+        >
           <HoverCardTrigger className="flex items-center font-bold">
             {label}
           </HoverCardTrigger>
