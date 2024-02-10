@@ -20,6 +20,8 @@ const App = () => {
     <div style={{ height: 800 }}>
       <FlowGraph nodes={dotiNodes}
       edges={dotiEdges}
+        setNodes={setDotiNodes}
+        setEdges={setDotiEdges}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { Handle, NodeProps, Position } from "reactflow";
+import { Handle, NodeProps, NodeToolbar, Position } from "reactflow";
 import { FC, memo } from "react";
 import { Card } from "@/components/ui/card.tsx";
 import {
@@ -18,16 +18,19 @@ const CustomNode: FC<NodeProps> = (props: NodeProps) => {
     border: `2px solid ${borderColor}`,
   };
   return (
-    <Card style={containerStyle} className={"relative z-20"}>
+    <Card style={containerStyle} className={"relative"}>
       <div className="flex items-center py-2 px-3">
         <Handle type="target" position={Position.Left} />
+
         <HoverCard>
           <HoverCardTrigger className="flex items-center font-bold">
             {label}
           </HoverCardTrigger>
-          <HoverCardContent className={"z-50"}>
-            <div className="text-sm"> {JSON.stringify(allData, null, 2)}</div>
-          </HoverCardContent>
+          <NodeToolbar isVisible={true}>
+            <HoverCardContent>
+              <div className="text-sm"> {JSON.stringify(allData, null, 2)}</div>
+            </HoverCardContent>
+          </NodeToolbar>
         </HoverCard>
 
         <Handle type="source" position={Position.Right} />
