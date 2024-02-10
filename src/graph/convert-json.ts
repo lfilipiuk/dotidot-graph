@@ -1,12 +1,11 @@
 import {DotiNode} from "../types/types.ts";
 import jsonData from '../data/mockData.json';
-import {getLayoutedDotiNodes} from "../utils/graph.ts";
-import {findNodesAndEdgesInData} from "@/graph/graph-builder.ts";
+import {getLayoutedNodes} from "../utils/graph.ts";
+import {processAllCollections} from "@/graph/processor.ts";
 
 export const convertJson = () => {
-    const { nodes, edges }: any = findNodesAndEdgesInData(jsonData);
-    const layoutedDotiNodes: DotiNode[] = getLayoutedDotiNodes(nodes, edges);
-    //const dotiNodeEntities: Entities<DotiNode> = arrayToEntities<DotiNode>(layoutedDotiNodes, 'id');
+    const { nodes, edges }: any = processAllCollections(jsonData);
+    const layoutedNodes: DotiNode[] = getLayoutedNodes(nodes, edges);
 
-    return { nodes: layoutedDotiNodes, edges };
+    return { nodes: layoutedNodes, edges };
 };

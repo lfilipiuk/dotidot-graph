@@ -3,7 +3,7 @@ import dagre from "dagre";
 export const DEFAULT_WIDTH = 172;
 const DEFAULT_HEIGHT = 36;
 
-export const getLayoutedDotiNodes = (nodes: any[], edges: any[]) => {
+export const getLayoutedNodes = (nodes: any[], edges: any[]) => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   dagreGraph.setGraph({
