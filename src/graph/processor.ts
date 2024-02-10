@@ -16,12 +16,28 @@ function processEntity(
   const node = createNode(entity, uniqueId);
   nodes.push(node);
 
+  // Additional logic for AdditionalSource entities
+  if (entity.__typename === "AdditionalSource" && entity.mappingField) {
+    const dataSourceVariableId = `DataSourceVariable-${entity.mappingField}`;
+    // Check if the DataSourceVariable node exists in nodes
+    const dataSourceVariableExists = nodes.some(node => node.id === dataSourceVariableId);
+    if (dataSourceVariableExists) {
+      // Create an edge from AdditionalSource to DataSourceVariable based on mappingField
+      edges.push(createEdge({ source: dataSourceVariableId, target: uniqueId }));
+    }
+    // You might also want to ensure that a node for the DataSourceVariable exists or create it if it doesn't
+    else {
+      // Optional: Create a placeholder DataSourceVariable node if not found, depending on your requirements
+    }
+  }
+
+
   if (entity.parentId && entity.parentId !== 0) {
     const parentUniqueId = `${entity.__typename}-${entity.parentId}`;
     edges.push(createEdge({ source: parentUniqueId, target: node.id }));
     //TODO: put types in a separate file
   } else if (parentId && entity.__typename !== "DataSourceVariable") {
-    edges.push(createEdge({ source: parentId, target: node.id }));
+    edges.push(createEdge({ source: node.id, target: parentId  }));
   }
 
   processPlaceholders(entity, node, edges);
@@ -116,7 +132,7 @@ function processPlaceholders(entity: any, node: any, edges: any[]) {
 
   // Use a Set to track unique edge identifiers
   const uniqueEdges = new Set(
-    edges.map((edge) => `${edge.source}-${edge.target}`),
+    edges.map((edge) => `${edge.target}-${edge.source}`),
   );
 
   combinedPlaceholders.forEach((placeholder) => {
@@ -126,7 +142,7 @@ function processPlaceholders(entity: any, node: any, edges: any[]) {
     // Only add the edge if it's not already tracked
     if (!uniqueEdges.has(edgeIdentifier)) {
       uniqueEdges.add(edgeIdentifier);
-      edges.push(createEdge({ source: node.id, target: placeholderId }));
+      edges.push(createEdge({ source: placeholderId, target: node.id }));
     }
   });
 }

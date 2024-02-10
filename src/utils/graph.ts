@@ -8,8 +8,17 @@ export const getLayoutedNodes = (nodes: any[], edges: any[]) => {
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   dagreGraph.setGraph({
     rankdir: "LR",
+   //rankdir: "TB",
+    //rankdir: "BT",
+    //rankdir: "RL",
     ranksep: 100,
-    align: "UR",
+    //align: "DR",
+   // align: "DL",
+ // align: "UR",
+   //align: "UL",
+   //ranker: "tight-tree",
+   // ranker: "longest-path",
+
   });
 
   nodes.forEach((node: any) => {

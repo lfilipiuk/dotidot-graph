@@ -44,7 +44,7 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
     const updatedNodes = nodes.map((node) => {
       const isActive =
         node.id === targetNode.id || connectedNodeIds.has(node.id);
-      const opacity = isActive ? 1 : 0.75; // Highlight active nodes more prominently
+      const opacity = isActive ? 1 : 0.25; // Highlight active nodes more prominently
       return {
         ...node,
         style: { ...node.style, opacity },
@@ -57,7 +57,7 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
       const isSourceOrTarget =
         edge.source === targetNode.id || edge.target === targetNode.id;
       const strokeColor = isSourceOrTarget ? "#000" : "#a6a6a6";
-      const opacity = isSourceOrTarget ? 1 : 0.25; // Highlight active nodes more prominently
+      const opacity = isSourceOrTarget ? 1 : 0.75; // Highlight active nodes more prominently
       return {
         ...edge,
         animated: isSourceOrTarget,
