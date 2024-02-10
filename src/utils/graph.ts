@@ -1,37 +1,40 @@
-import { DotiNode } from "../types/types.ts";
 import dagre from "dagre";
-import { sizes } from "../ui/constants/sizes.ts";
 
-const DEFAULT_WIDTH = 172;
+export const DEFAULT_WIDTH = 172;
 const DEFAULT_HEIGHT = 36;
 
-export const getLayoutedDotiNodes = (dotiNodes: DotiNode[]): DotiNode[] => {
-    const dagreGraph = new dagre.graphlib.Graph();
-    dagreGraph.setDefaultEdgeLabel(() => ({}));
-    dagreGraph.setGraph({ rankdir: "LR" }); // 'LR' is Left to Right direction.
+export const getLayoutedDotiNodes = (nodes: any[], edges: any[]) => {
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({
+    rankdir: "LR",
+    ranksep: 200,
+    align: "UR",
+  });
 
-    dotiNodes.forEach((node: DotiNode) => {
-        dagreGraph.setNode(node.id, { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT });
+  nodes.forEach((node: any) => {
+    dagreGraph.setNode(node.id, {
+      width: DEFAULT_WIDTH,
+      height: DEFAULT_HEIGHT,
     });
+  });
 
-    // edges
-    //     .filter(({ type }) => type === 'default') // Do not consider 'chain' edge.
-    //     .forEach((edge) => {
-    //         dagreGraph.setEdge(edge.source, edge.target);
-    //     });
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
 
-    dagre.layout(dagreGraph);
+  dagre.layout(dagreGraph);
 
-    return dotiNodes.map((node: DotiNode) => {
-        const nodeWithPosition = dagreGraph.node(node.id);
-        return {
-          ...node,
-          // 'x' is already set at this moment because of `getXYPosition` function.
-          position: {
-            ...node.position,
-            x: nodeWithPosition.x - sizes.nodeMaxWidth / 2,
-            y: nodeWithPosition.y - DEFAULT_HEIGHT / 2,
-          },
-        };
-    });
+  return nodes.map((node: any) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - DEFAULT_WIDTH / 2,
+        //x: node.position.x,
+        y: nodeWithPosition.y - DEFAULT_HEIGHT / 2,
+      },
+    };
+  });
 };

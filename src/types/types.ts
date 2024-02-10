@@ -68,12 +68,4 @@ export type BaseAdTextNode = Node<BaseAdTextNodeData, "object">;
 export type BidRuleNode = Node<BidRuleNodeData, "object">;
 export type VariableNode = Node<VariableNodeData, "object">;
 
-export type DotiNode =
-  | FeedExportNode
-  | AdditionalSourceNode
-  | CampaignSettingNode
-  | AdwordsSettingNode
-  | KeywordSettingNode
-  | BaseAdTextNode
-  | BidRuleNode
-  | VariableNode;
+export type DotiNode = Node;

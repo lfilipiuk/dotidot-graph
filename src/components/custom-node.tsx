@@ -1,5 +1,5 @@
 import { Handle, NodeProps, Position } from "reactflow";
-import { FC } from "react";
+import {FC, memo} from "react";
 import { Card } from "@/components/ui/card.tsx";
 
 const CustomNode: FC<NodeProps> = (props: NodeProps) => {
@@ -10,7 +10,6 @@ const CustomNode: FC<NodeProps> = (props: NodeProps) => {
   const containerStyle = {
     border: `2px solid ${borderColor}`,
   };
-
   return (
     <Card style={containerStyle} className={"relative"}>
       <div className="flex items-center py-2 px-3">
@@ -25,4 +24,4 @@ const CustomNode: FC<NodeProps> = (props: NodeProps) => {
   );
 };
 
-export default CustomNode;
+export default memo(CustomNode);
