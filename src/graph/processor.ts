@@ -7,13 +7,13 @@ function processEntity(
   edges: any[],
   processedIds: Set<string>,
 ) {
-  let uniqueId = generateUniqueId(entity);
+  const uniqueId = generateUniqueId(entity);
 
   //TODO: handle unique
   //if (processedIds.has(uniqueId)) return;
   processedIds.add(uniqueId);
 
-  let node = createNode(entity, uniqueId);
+  const node = createNode(entity, uniqueId);
   nodes.push(node);
 
   if (entity.parentId && entity.parentId !== 0) {
@@ -84,9 +84,9 @@ function processAsChain(
 }
 
 export function processAllCollections(jsonData: { data: any }) {
-  let nodes: any[] = [];
-  let edges: any[] = [];
-  let processedIds = new Set<string>(); // To track processed entities
+  const nodes: any[] = [];
+  const edges: any[] = [];
+  const processedIds = new Set<string>(); // To track processed entities
 
   const collections = [
     "variables",
