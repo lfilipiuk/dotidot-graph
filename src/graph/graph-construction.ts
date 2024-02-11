@@ -15,6 +15,8 @@ export function createNode(data: any, uniqueId: string) {
       borderColor,
     },
     position: { x: 0, y: 0 },
+    width: 200,
+    height: 50,
   };
 }
 

@@ -9,35 +9,48 @@ function processEntity(
 ) {
   const uniqueId = generateUniqueId(entity);
 
-  //TODO: handle unique
-  //if (processedIds.has(uniqueId)) return;
-  processedIds.add(uniqueId);
+  const nodeAlreadyExists = processedIds.has(uniqueId);
+
+  if (!nodeAlreadyExists) processedIds.add(uniqueId);
 
   const node = createNode(entity, uniqueId);
-  nodes.push(node);
+
+  if (nodeAlreadyExists) {
+    const existingNodeIndex = nodes.findIndex((node) => node.id === uniqueId);
+    const existingNode = nodes[existingNodeIndex];
+    Object.assign(existingNode, node);
+  } else {
+    nodes.push(node);
+  }
 
   // Additional logic for AdditionalSource entities
   if (entity.__typename === "AdditionalSource" && entity.mappingField) {
     const dataSourceVariableId = `DataSourceVariable-${entity.mappingField}`;
     // Check if the DataSourceVariable node exists in nodes
-    const dataSourceVariableExists = nodes.some(node => node.id === dataSourceVariableId);
+    const dataSourceVariableExists = nodes.some(
+      (node) => node.id === dataSourceVariableId,
+    );
     if (dataSourceVariableExists) {
       // Create an edge from AdditionalSource to DataSourceVariable based on mappingField
-      edges.push(createEdge({ source: dataSourceVariableId, target: uniqueId }));
+      edges.push(
+        createEdge({ source: dataSourceVariableId, target: uniqueId }),
+      );
     }
     // You might also want to ensure that a node for the DataSourceVariable exists or create it if it doesn't
     else {
       // Optional: Create a placeholder DataSourceVariable node if not found, depending on your requirements
     }
-  }
-
-
-  if (entity.parentId && entity.parentId !== 0) {
-    const parentUniqueId = `${entity.__typename}-${entity.parentId}`;
-    edges.push(createEdge({ source: parentUniqueId, target: node.id }));
-    //TODO: put types in a separate file
-  } else if (parentId && entity.__typename !== "DataSourceVariable") {
-    edges.push(createEdge({ source: node.id, target: parentId  }));
+  } else if (entity.__typename === "AdditionalSource" && parentId) {
+    edges.push(createEdge({ source: uniqueId, target: parentId }));
+  } else {
+    if (entity.parentId && entity.parentId !== 0) {
+      const parentUniqueId = `${entity.__typename}-${entity.parentId}`;
+      edges.push(createEdge({ source: parentUniqueId, target: node.id }));
+      //TODO: put types in a separate file
+    } else if (parentId && entity.__typename !== "DataSourceVariable") {
+      //edges.push(createEdge({ source: node.id, target: parentId }));
+      edges.push(createEdge({ source: parentId, target: node.id }));
+    }
   }
 
   processPlaceholders(entity, node, edges);

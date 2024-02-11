@@ -18,10 +18,9 @@ const CustomNode: FC<NodeProps> = (props: NodeProps) => {
     border: `2px solid ${borderColor}`,
   };
   return (
-    <Card style={containerStyle} className={"relative"}>
-      <div className="flex items-center py-2 px-3">
-        <Handle type="target" position={Position.Left} />
-
+    <Card style={containerStyle} className={"w-48 relative"}>
+      <Handle type="target" position={Position.Left} />
+      <div className="flex items-center py-2 px-3 justify-center">
         <HoverCard
         openDelay={100}
         closeDelay={0}
@@ -35,9 +34,8 @@ const CustomNode: FC<NodeProps> = (props: NodeProps) => {
             </HoverCardContent>
           </NodeToolbar>
         </HoverCard>
-
-        <Handle type="source" position={Position.Right} />
       </div>
+      <Handle type="source" position={Position.Right} />
     </Card>
   );
 };
