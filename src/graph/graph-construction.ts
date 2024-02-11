@@ -1,9 +1,5 @@
-import { NodeColorKey, nodeColors } from "@/graph/node-colors.ts";
-
 export function createNode(data: any, uniqueId: string) {
-  const typeName: NodeColorKey = data.__typename as NodeColorKey;
-  const borderColor = nodeColors[typeName] || "defaultColor";
-
+  const typeName = data.__typename;
   const label = data.name || typeName || data.id.toString();
 
   return {
@@ -12,8 +8,8 @@ export function createNode(data: any, uniqueId: string) {
     data: {
       ...data,
       label: label,
-      borderColor,
     },
+    // TODO: maybe not needed
     position: { x: 0, y: 0 },
     width: 200,
     height: 50,

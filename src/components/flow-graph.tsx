@@ -1,4 +1,4 @@
-import ReactFlow, { Background, Controls, Edge, Node } from "reactflow";
+import ReactFlow, { Controls, Edge, Node } from "reactflow";
 import CustomNode from "@/components/custom-node.tsx";
 
 type FlowGraphProps = {
@@ -80,6 +80,7 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
       nodeTypes={nodeTypes}
       edges={edges}
       nodes={nodes}
+      proOptions={{ hideAttribution: true }}
       fitView
       onNodeClick={(_event, node) => {
         resetHighlight();
@@ -88,7 +89,6 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
       onPaneClick={onPaneClick}
     >
       <Controls />
-      <Background color="#fff" />
     </ReactFlow>
   );
 };

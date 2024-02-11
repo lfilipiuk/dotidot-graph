@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import {useEdgesState, useNodesState} from "reactflow";
+import { useEdgesState, useNodesState } from "reactflow";
 import "reactflow/dist/style.css";
 import { convertJson } from "@/graph/convert-json.ts";
 import FlowGraph from "./components/flow-graph.tsx";
@@ -7,19 +6,14 @@ import FlowGraph from "./components/flow-graph.tsx";
 const { nodes, edges } = convertJson();
 
 const App = () => {
-  const [dotiNodes, setDotiNodes] = useNodesState([]);
-  const [dotiEdges, setDotiEdges] = useEdgesState([]);
-
-
-  useEffect(() => {
-    setDotiNodes(nodes);
-    setDotiEdges(edges);
-  }, []);
+  const [dotiNodes, setDotiNodes] = useNodesState(nodes);
+  const [dotiEdges, setDotiEdges] = useEdgesState(edges);
 
   return (
-    <div style={{ height: 800 }}>
-      <FlowGraph nodes={dotiNodes}
-      edges={dotiEdges}
+    <div className={"h-screen"}>
+      <FlowGraph
+        nodes={dotiNodes}
+        edges={dotiEdges}
         setNodes={setDotiNodes}
         setEdges={setDotiEdges}
       />
