@@ -7,10 +7,12 @@ import {
   Entity,
   EntityCollection,
   JsonData,
-  ProcessedIds,
 } from "@/variable-map/types.ts";
-import { entityConfig } from "@/variable-map/utils/entity-config.ts";
+import { entityConfig } from "@/variable-map/utils/config.ts";
 import { generateUniqueId } from "@/variable-map/utils/generate-unique-id.ts";
+import { EntitySpecificProperty, EntityType } from "@/variable-map/enums.ts";
+
+type ProcessedIds = Set<string>;
 
 function processEntity(
   entity: Entity,
@@ -40,8 +42,11 @@ function processEntity(
   }
 
   //Type specific logic
-  if (entity.__typename === "AdditionalSource" && entity.mappingField) {
-    const dataSourceVariableId = `DataSourceVariable-${entity.mappingField}`;
+  if (
+    entity.__typename === EntityType.AdditionalSource &&
+    entity.mappingField
+  ) {
+    const dataSourceVariableId = `${EntityType.DataSourceVariable}-${entity.mappingField}`;
     const dataSourceVariableExists = nodes.some(
       (node) => node.id === dataSourceVariableId,
     );
@@ -50,13 +55,19 @@ function processEntity(
         createEdge({ source: dataSourceVariableId, target: uniqueId }),
       );
     }
-  } else if (entity.__typename === "AdditionalSource" && nestedEntityId) {
+  } else if (
+    entity.__typename === EntityType.AdditionalSource &&
+    nestedEntityId
+  ) {
     edges.push(createEdge({ source: uniqueId, target: nestedEntityId }));
   } else {
     if (entity.parentId && entity.parentId !== 0) {
       const parentUniqueId = `${entity.__typename}-${entity.parentId}`;
       edges.push(createEdge({ source: parentUniqueId, target: node.id }));
-    } else if (nestedEntityId && entity.__typename !== "DataSourceVariable") {
+    } else if (
+      nestedEntityId &&
+      entity.__typename !== EntityType.DataSourceVariable
+    ) {
       edges.push(createEdge({ source: nestedEntityId, target: node.id }));
     }
   }
@@ -68,7 +79,7 @@ function processEntity(
   entityProperties.forEach((property) => {
     const propertyValue = entity[property as keyof Entity];
     if (Array.isArray(propertyValue)) {
-      if (property === "baseAdtexts") {
+      if (property === EntitySpecificProperty.BaseAdtexts) {
         processEntities(
           propertyValue as Entity[],
           nodes,
@@ -147,7 +158,7 @@ function processPlaceholders(entity: Entity, node: Node, edges: Edge[]): void {
   );
 
   combinedPlaceholders.forEach((placeholder) => {
-    const placeholderId = `DataSourceVariable-${placeholder}`;
+    const placeholderId = `${EntityType.DataSourceVariable}-${placeholder}`;
     const edgeIdentifier = `${node.id}-${placeholderId}`;
 
     if (!uniqueEdges.has(edgeIdentifier)) {

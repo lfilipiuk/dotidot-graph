@@ -8,7 +8,7 @@ import {
   Megaphone,
   Presentation,
 } from "lucide-react";
-import { NodeType, VariableType } from "@/variable-map/types.ts";
+import {NodeType, VariableType} from "@/variable-map/enums.ts";
 
 interface IconProps {
   type: NodeType;

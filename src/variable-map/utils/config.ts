@@ -1,5 +1,8 @@
-import { ColorProps } from "@/variable-map/types.ts";
 import {EntityCollectionName, EntitySpecificProperty, NodeType} from "@/variable-map/enums.ts";
+interface ColorProps {
+  border: string;
+  background: string;
+}
 
 export const entityConfig = {
   entitySpecificProperties: {

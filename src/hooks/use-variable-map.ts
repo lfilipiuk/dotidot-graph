@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNodesState, useEdgesState } from "reactflow";
-import { convertJsonToVariableMap } from "@/variable-map/convert-json-to-variable-map";
 import { generateLayout } from "@/variable-map/graph-layout.ts";
+import { processCollections } from "@/variable-map/entity-processor.ts";
 
 export function useVariableMap() {
   const [nodes, setNodes] = useNodesState([]);
@@ -23,7 +23,7 @@ export function useVariableMap() {
         }
         const jsonData = await response.json();
         const { nodes: initialNodes, edges: initialEdges } =
-          convertJsonToVariableMap(jsonData);
+          processCollections(jsonData);
 
         const layoutedNodes = generateLayout(initialNodes, initialEdges);
 

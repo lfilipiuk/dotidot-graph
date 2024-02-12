@@ -30,10 +30,3 @@ export interface Entity {
   } | null;
   [key: string]: unknown;
 }
-
-export type ProcessedIds = Set<string>;
-
-export interface ColorProps {
-  border: string;
-  background: string;
-}

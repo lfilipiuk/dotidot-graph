@@ -2,7 +2,7 @@ import { Node, Edge } from "reactflow";
 import { deepCloneObject } from "@/lib/utils.ts";
 import { EntityType, NodeType } from "@/variable-map/enums.ts";
 
-interface BasketConfig {
+export interface BasketConfig {
   rules: (
     node: Node,
     sourceTypesForNode: Record<string, Set<string>>,
@@ -10,7 +10,7 @@ interface BasketConfig {
   startY: number;
 }
 
-interface Baskets {
+export interface Baskets {
   [key: string]: {
     nodes: Node[];
     config: BasketConfig;
@@ -35,7 +35,7 @@ function initializeBaskets(): Baskets {
       nodes: [],
       config: {
         rules: (node) => node.data.type === NodeType.AdditionalSource,
-        startY: 100,
+        startY: 25,
       },
     },
     //Variables with a target go here
@@ -53,7 +53,7 @@ function initializeBaskets(): Baskets {
       nodes: [],
       config: {
         rules: (node) => node.data.type === NodeType.Modifier,
-        startY: 150,
+        startY: 75,
       },
     },
     //Campaign settings go here

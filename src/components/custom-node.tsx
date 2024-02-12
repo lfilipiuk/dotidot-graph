@@ -1,8 +1,8 @@
 import { FC, memo } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import CustomNodeIcon from "@/components/custom-node-icon.tsx";
-import { NodeType, VariableType } from "@/variable-map/types.ts";
-import { colorMapping } from "@/variable-map/utils/entity-config.ts";
+import { colorMapping } from "@/variable-map/utils/config.ts";
+import { NodeType, VariableType } from "@/variable-map/enums.ts";
 
 interface CustomNodeData {
   label: string;
