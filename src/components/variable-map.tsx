@@ -11,7 +11,6 @@ type VariableMapProps = {
 const nodeTypes = {
   "custom-node": CustomNode,
 };
-
 const VariableMap = ({
   nodes,
   edges,
@@ -34,7 +33,7 @@ const VariableMap = ({
     setEdges(updatedEdges);
   };
 
-  const highlightPath = (targetNode: Node): void => {
+  const highlightSelection = (targetNode: Node): void => {
     // Determine IDs of nodes directly connected to the targetNode
     const connectedNodeIds = new Set();
     edges.forEach((edge) => {
@@ -90,7 +89,7 @@ const VariableMap = ({
       edgesFocusable={false}
       onNodeClick={(_event, node) => {
         resetHighlight();
-        highlightPath(node);
+        highlightSelection(node);
       }}
       onPaneClick={onPaneClick}
     >

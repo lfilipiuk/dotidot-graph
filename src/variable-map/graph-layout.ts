@@ -158,20 +158,21 @@ function applyWaterfallEffect(
     maxDepth = Math.max(maxDepth, depth);
     const xModifier = node.data.__typename === "BaseAdtext" ? 100 : 250;
     node.position = { x: startX + depth * xModifier, y: currentY };
-    currentY += 100; // Adjust this value if you need more space between nodes vertically
+    currentY += 100;
   });
 
   return maxDepth;
 }
 
 export function generateLayout(nodes: Node[], edges: Edge[]): Node[] {
+  const baskets = initializeBaskets();
   const nodesWithPositions = deepCloneObject(nodes);
   const { sourceTypesForNode, parentNodeIdForNode } = mapEdgesToNodes(
     nodesWithPositions,
     edges,
   );
-  const baskets = initializeBaskets();
   sortNodesIntoBaskets(nodesWithPositions, baskets, sourceTypesForNode);
+
   const adjustedDepths = calculateAdjustedDepths(
     nodesWithPositions,
     parentNodeIdForNode,

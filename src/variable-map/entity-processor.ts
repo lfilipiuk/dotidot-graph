@@ -14,7 +14,7 @@ import { generateUniqueId } from "@/variable-map/utils/generate-unique-id.ts";
 
 function processEntity(
   entity: Entity,
-  parentId: string | null,
+  nestedEntityId: string | null,
   nodes: Node[],
   edges: Edge[],
   processedIds: ProcessedIds,
@@ -50,14 +50,14 @@ function processEntity(
         createEdge({ source: dataSourceVariableId, target: uniqueId }),
       );
     }
-  } else if (entity.__typename === "AdditionalSource" && parentId) {
-    edges.push(createEdge({ source: uniqueId, target: parentId }));
+  } else if (entity.__typename === "AdditionalSource" && nestedEntityId) {
+    edges.push(createEdge({ source: uniqueId, target: nestedEntityId }));
   } else {
     if (entity.parentId && entity.parentId !== 0) {
       const parentUniqueId = `${entity.__typename}-${entity.parentId}`;
       edges.push(createEdge({ source: parentUniqueId, target: node.id }));
-    } else if (parentId && entity.__typename !== "DataSourceVariable") {
-      edges.push(createEdge({ source: parentId, target: node.id }));
+    } else if (nestedEntityId && entity.__typename !== "DataSourceVariable") {
+      edges.push(createEdge({ source: nestedEntityId, target: node.id }));
     }
   }
 
@@ -69,11 +69,11 @@ function processEntity(
     const propertyValue = entity[property as keyof Entity];
     if (Array.isArray(propertyValue)) {
       if (property === "baseAdtexts") {
-        processAsChain(
+        processEntities(
           propertyValue as Entity[],
-          node.id,
           nodes,
           edges,
+          node.id,
           processedIds,
         );
       } else {
@@ -97,7 +97,7 @@ function getEntitySpecificProperties(entity: Entity): string[] {
   return entityConfig.entitySpecificProperties[entity.__typename] || [];
 }
 
-function processCollection(
+function processEntities(
   collection: Entity[],
   nodes: Node[],
   edges: Edge[],
@@ -108,19 +108,6 @@ function processCollection(
     processEntity(entity, parentId, nodes, edges, processedIds),
   );
 }
-
-function processAsChain(
-  entities: Entity[],
-  parentId: string,
-  nodes: Node[],
-  edges: Edge[],
-  processedIds: ProcessedIds,
-): void {
-  entities.forEach((entity) =>
-    processEntity(entity, parentId, nodes, edges, processedIds),
-  );
-}
-
 export function processCollections(jsonData: JsonData): {
   nodes: Node[];
   edges: Edge[];
@@ -133,7 +120,7 @@ export function processCollections(jsonData: JsonData): {
     const key = collectionName as keyof EntityCollection;
     const collectionEntities = jsonData.data[key]?.[key];
     if (Array.isArray(collectionEntities)) {
-      processCollection(collectionEntities, nodes, edges, null, processedIds);
+      processEntities(collectionEntities, nodes, edges, null, processedIds);
     } else {
       console.error(
         `Expected an array for ${collectionName}, but received:`,
