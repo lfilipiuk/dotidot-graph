@@ -1,8 +1,18 @@
 # Dotidot Variable Map
 
-## High level overview
+The Dotidot Variable Map is designed to visualize relationships between various entities, such as campaigns, variables, and sources, in a structured and interactive manner using React Flow. This setup is intended for demonstration purposes, suggesting a real-world application would involve fetching data from a live API.
 
-The Dotidot Variable Map is a tool designed to visualize and interact with fetched data fetched. Its primary functionality revolves around fetching JSON data, converting it into a map of nodes and edges, and generating a layout for visualization using the React Flow library. The map allows users to explore relationships between various entities within the data and understand the structure more intuitively.
+### Core Features:
+- **Data Fetching:** Utilizes a custom `useVariableMap` hook for fetching and processing data from a JSON source, converting it into a map of nodes and edges compatible with React Flow.
+- **Configurable Entity Processing:** The process involves several key functions like `processCollections`, `processEntities`, and `processEntity` to dynamically parse and convert JSON data into a structured format that delineates different entities such as variables, campaign settings, and additional sources, making it adaptable to include new collections as needed.
+- **Unique Identification and Merging:** A mechanism to generate unique identifiers for entities to manage potential ID conflicts and ensure accurate representation and merging of related entities.
+- **Visual Layout Generation:** A layout generation algorithm (`generateLayout`) that organizes nodes into configurable "baskets" based on their relationships and types, ensuring a clear and logical visual representation.
+- **Interactive Visualization:** The `VariableMap` component enhances user interaction with the variable map by enabling node selection, highlighting relationships, and providing an intuitive interface for exploring the connections between different entities.
+
+### Implementation Details:
+- **JSON Conversion and Node Creation:** The system parses JSON data, identifying and categorizing entities into nodes and edges with detailed logic for edge creation based on entity relationships. This includes handling nested entities and applying specific rules for connections between them.
+- **Layout Strategy:** The layout algorithm employs a basket system for grouping nodes, adjusting their positions based on predefined rules and relationships, such as the presence of parent-child connections or specific entity types, to facilitate an organized and readable flowchart.
+- **User Interaction:** Enhanced interaction features include functions for resetting highlight styles, highlighting selected nodes and their connections, and managing transparency and animation for a user-friendly experience.
 
 ## How it works?
 
