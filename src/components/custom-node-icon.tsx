@@ -1,4 +1,3 @@
-import { NodeType } from "@/graph/graph-construction.ts";
 import {
   CalendarDays,
   Coins,
@@ -9,6 +8,7 @@ import {
   Megaphone,
   Presentation,
 } from "lucide-react";
+import { NodeType } from "@/graph/types.ts";
 
 interface IconProps {
   type: NodeType;

@@ -3,7 +3,7 @@ import { processAllCollections } from "@/graph/processor.ts";
 import { GraphLayout } from "./graph-layout.ts";
 
 export const convertJson = () => {
-  const { nodes, edges }: any = processAllCollections(jsonData);
+  const { nodes, edges } = processAllCollections(jsonData);
 
   const graphLayout = new GraphLayout(nodes, edges);
   const layoutedNodes = graphLayout.generateLayout();

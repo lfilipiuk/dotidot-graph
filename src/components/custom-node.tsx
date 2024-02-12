@@ -1,8 +1,8 @@
 import { FC, memo } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import { cn } from "@/lib/utils.ts";
-import { CustomNodeData, NodeType } from "@/graph/graph-construction.ts";
 import CustomNodeIcon from "@/components/custom-node-icon.tsx";
+import { NodeType } from "@/graph/types.ts";
 interface ColorProps {
   border: string;
   background: string;
@@ -20,6 +20,12 @@ const colorMapping: Record<NodeType, ColorProps> = {
   [NodeType.BidRule]: { border: "#C71585", background: "#FFB6C1" },
   [NodeType.Default]: { border: "#808080", background: "#D3D3D3" },
 };
+
+interface CustomNodeData {
+  label: string;
+  type: NodeType;
+  showValueType: "number" | "text" | "date" | "array" | "image";
+}
 
 const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data }) => {
   const label = data.label;

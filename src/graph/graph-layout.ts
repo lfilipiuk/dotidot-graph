@@ -1,24 +1,33 @@
+import { Node, Edge } from "reactflow";
+import { NodeType } from "@/graph/types";
+interface Baskets {
+  dataFieldNoTarget: Node[];
+  dataFieldWithTarget: Node[];
+  additionalSource: Node[];
+  modifier: Node[];
+  campaignSetting: Node[];
+  others: Node[];
+}
+
 export class GraphLayout {
-  constructor(nodes, edges) {
+  constructor(
+    public nodes: Node[],
+    public edges: Edge[],
+  ) {
     this.nodes = this.deepClone(nodes);
     this.edges = this.deepClone(edges);
   }
 
-  // Simple deep clone method - consider replacing for complex objects
-  deepClone(obj) {
+  deepClone<T>(obj: T): T {
     try {
       return JSON.parse(JSON.stringify(obj));
     } catch (error) {
       console.error("Deep clone error:", error);
-      // Implement or replace with a more complex deep clone method if needed
-      return null;
+      return obj; // Return the original object if clone fails
     }
   }
 
-  // Include your existing functions here, possibly with some modifications
-  // to make them methods of this class rather than standalone functions.
-
-  initializeBaskets() {
+  initializeBaskets(): Baskets {
     return {
       dataFieldNoTarget: [],
       additionalSource: [],
@@ -29,15 +38,18 @@ export class GraphLayout {
     };
   }
 
-  mapEdgesToNodes() {
-    let sourceTypesForNode = {};
-    let parentNodeIdForNode = {};
+  mapEdgesToNodes(): {
+    sourceTypesForNode: Record<string, Set<string>>;
+    parentNodeIdForNode: Record<string, Set<string>>;
+  } {
+    const sourceTypesForNode: Record<string, Set<string>> = {};
+    const parentNodeIdForNode: Record<string, Set<string>> = {};
 
     this.edges.forEach((edge) => {
       if (!sourceTypesForNode[edge.target]) {
         sourceTypesForNode[edge.target] = new Set();
       }
-      let sourceNode = this.nodes.find((node) => node.id === edge.source);
+      const sourceNode = this.nodes.find((node) => node.id === edge.source);
       if (sourceNode) {
         sourceTypesForNode[edge.target].add(sourceNode.data.__typename);
         parentNodeIdForNode[edge.target] =
@@ -49,24 +61,30 @@ export class GraphLayout {
     return { sourceTypesForNode, parentNodeIdForNode };
   }
 
-  sortNodesIntoBaskets(sourceTypesForNode) {
-    let baskets = this.initializeBaskets();
+  sortNodesIntoBaskets(
+    sourceTypesForNode: Record<string, Set<string>>,
+  ): Baskets {
+    const baskets = this.initializeBaskets();
 
     this.nodes.forEach((node) => {
-      let type = node.data.__typename;
-      let id = node.data.id;
-      let targetBasket = "others";
+      let targetBasket: keyof Baskets = "others";
 
-      if (type === "DataSourceVariable" && id.includes("Data")) {
-        targetBasket = sourceTypesForNode[node.id]
-          ? "dataFieldWithTarget"
-          : "dataFieldNoTarget";
-      } else if (type === "AdditionalSource") {
-        targetBasket = "additionalSource";
-      } else if (type === "DataSourceVariable" && id.includes("Modifier")) {
-        targetBasket = "modifier";
-      } else if (type === "CampaignSetting") {
-        targetBasket = "campaignSetting";
+      switch (node.data.type) {
+        case NodeType.Variable:
+          targetBasket = sourceTypesForNode[node.id]?.size
+            ? "dataFieldWithTarget"
+            : "dataFieldNoTarget";
+          break;
+        case NodeType.AdditionalSource:
+          targetBasket = "additionalSource";
+          break;
+        case NodeType.Modifier:
+          targetBasket = "modifier";
+          break;
+        case NodeType.Campaign:
+          targetBasket = "campaignSetting";
+          break;
+        // Add other cases as necessary
       }
 
       baskets[targetBasket].push(node);
@@ -75,15 +93,17 @@ export class GraphLayout {
     return baskets;
   }
 
-  calculateAdjustedDepths(parentNodeIdForNode) {
-    let adjustedDepths = {};
+  calculateAdjustedDepths(
+    parentNodeIdForNode: Record<string, Set<string>>,
+  ): Record<string, number> {
+    const adjustedDepths: Record<string, number> = {};
 
-    const calculateDepth = (node, basketTypeName) => {
-      let parentIds = parentNodeIdForNode[node.id] || [];
+    const calculateDepth = (node: Node, basketTypeName: string) => {
+      const parentIds = parentNodeIdForNode[node.id] || new Set();
       parentIds.forEach((parentId) => {
-        let parent = this.nodes.find((n) => n.id === parentId);
+        const parent = this.nodes.find((n) => n.id === parentId);
         if (parent && parent.data.__typename === basketTypeName) {
-          let depth =
+          const depth =
             adjustedDepths[parent.id] !== undefined
               ? adjustedDepths[parent.id] + 1
               : 1;
@@ -101,12 +121,17 @@ export class GraphLayout {
     return adjustedDepths;
   }
 
-  applyWaterfallEffect(basket, startX, startY, adjustedDepths) {
+  applyWaterfallEffect(
+    basket: Node[],
+    startX: number,
+    startY: number,
+    adjustedDepths: Record<string, number>,
+  ): number {
     let currentY = startY;
     let maxDepth = 0;
 
     basket.forEach((node) => {
-      let depth = adjustedDepths[node.id] || 0;
+      const depth = adjustedDepths[node.id] || 0;
       maxDepth = Math.max(maxDepth, depth);
       const xModifier = node.data.__typename === "BaseAdtext" ? 100 : 250;
       node.position = { x: startX + depth * xModifier, y: currentY };
@@ -116,18 +141,19 @@ export class GraphLayout {
     return maxDepth;
   }
 
-  generateLayout() {
-    let { sourceTypesForNode, parentNodeIdForNode } = this.mapEdgesToNodes();
-    let baskets = this.sortNodesIntoBaskets(sourceTypesForNode);
-    let adjustedDepths = this.calculateAdjustedDepths(parentNodeIdForNode);
+  generateLayout(): Node[] {
+    const { sourceTypesForNode, parentNodeIdForNode } = this.mapEdgesToNodes();
+    const baskets = this.sortNodesIntoBaskets(sourceTypesForNode);
+    const adjustedDepths = this.calculateAdjustedDepths(parentNodeIdForNode);
 
     let startX = 100;
-    let startY = 50;
-    let basketSpacing = 20;
+    const startY = 50;
+    const basketSpacing = 20;
 
     Object.keys(baskets).forEach((basketKey) => {
-      let maxDepth = this.applyWaterfallEffect(
-        baskets[basketKey],
+      const key = basketKey as keyof Baskets;
+      const maxDepth = this.applyWaterfallEffect(
+        baskets[key],
         startX,
         startY,
         adjustedDepths,

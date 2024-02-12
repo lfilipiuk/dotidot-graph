@@ -1,38 +1,19 @@
-export interface CustomNodeData {
-  __typename: string;
-  id: string;
-  label: string;
-  type: NodeType;
-  showValueType?: "text" | "number" | "date" | "array" | "image";
-}
+import { Node } from "reactflow";
+import { Entity, NodeType } from "@/graph/types.ts";
 
-export enum NodeType {
-  Variable = "variable",
-  Modifier = "modifier",
-  AdditionalSource = "additional-source",
-  Campaign = "campaign",
-  FeedExport = "feed-export",
-  KeywordSetting = "keyword-setting",
-  AdwordsSetting = "adwords-setting",
-  BaseAdtext = "base-adtext",
-  BidRule = "bid-rule",
-  Default = "default",
-}
-
-export function createNode(data: any, uniqueId: string) {
-  const typeName = data.__typename;
-  const label = data.name || typeName || data.id.toString();
-  const type = getNodeType(data);
+export function createNode(entity: Entity, uniqueId: string): Node {
+  const typeName = entity.__typename;
+  const label = entity.name || typeName || entity.id.toString();
+  const type = getNodeType(entity);
 
   return {
     id: uniqueId,
     type: "custom-node",
     data: {
-      ...data,
+      ...entity,
       label: label,
       type: type,
     },
-    // TODO: maybe not needed
     position: { x: 0, y: 0 },
     width: 200,
     height: 50,
@@ -55,15 +36,15 @@ export function createEdge({
   };
 }
 
-const getNodeType = (data: CustomNodeData): NodeType => {
+const getNodeType = (data: Entity): NodeType => {
   if (
     data.__typename === "DataSourceVariable" &&
-    data.id.includes("DataField")
+    data.id.toString().includes("DataField")
   ) {
     return NodeType.Variable;
   } else if (
     data.__typename === "DataSourceVariable" &&
-    data.id.includes("Modifier")
+    data.id.toString().includes("Modifier")
   ) {
     return NodeType.Modifier;
   } else if (data.__typename === "AdditionalSource") {
