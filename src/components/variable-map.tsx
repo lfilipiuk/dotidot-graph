@@ -1,7 +1,7 @@
 import ReactFlow, { Controls, Edge, Node } from "reactflow";
 import CustomNode from "@/components/custom-node.tsx";
 
-type FlowGraphProps = {
+type VariableMapProps = {
   nodes: Node[];
   edges: Edge[];
   setNodes: (nodes: Node[]) => void;
@@ -12,7 +12,12 @@ const nodeTypes = {
   "custom-node": CustomNode,
 };
 
-const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
+const VariableMap = ({
+  nodes,
+  edges,
+  setNodes,
+  setEdges,
+}: VariableMapProps) => {
   const resetHighlight = (): void => {
     const updatedNodes = nodes.map((node) => ({
       ...node,
@@ -44,7 +49,7 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
     const updatedNodes = nodes.map((node) => {
       const isActive =
         node.id === targetNode.id || connectedNodeIds.has(node.id);
-      const opacity = isActive ? 1 : 0.25; // Highlight active nodes more prominently
+      const opacity = isActive ? 1 : 0.25;
       return {
         ...node,
         style: { ...node.style, opacity },
@@ -65,7 +70,7 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
       };
     });
 
-    // Apply the updated nodes and edges to the graph
+    // Apply the updated nodes and edges to the variable-map
     setNodes(updatedNodes);
     setEdges(updatedEdges);
   };
@@ -82,6 +87,7 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
       nodes={nodes}
       proOptions={{ hideAttribution: true }}
       fitView
+      edgesFocusable={false}
       onNodeClick={(_event, node) => {
         resetHighlight();
         highlightPath(node);
@@ -93,4 +99,4 @@ const FlowGraph = ({ nodes, edges, setNodes, setEdges }: FlowGraphProps) => {
   );
 };
 
-export default FlowGraph;
+export default VariableMap;

@@ -1,12 +1,11 @@
+export interface JsonData {
+  data: EntityCollection;
+}
 export interface EntityCollection {
   feedExports?: CollectionWithEntities;
   additionalSources?: CollectionWithEntities;
   campaignSettings?: CollectionWithEntities;
   variables?: CollectionWithEntities;
-}
-
-export interface JsonData {
-  data: EntityCollection;
 }
 
 interface CollectionWithEntities {
@@ -45,4 +44,17 @@ export enum NodeType {
   BaseAdtext = "base-adtext",
   BidRule = "bid-rule",
   Default = "default",
+}
+
+export interface ColorProps {
+  border: string;
+  background: string;
+}
+
+export enum VariableType {
+  Number = "number",
+  Text = "text",
+  Date = "date",
+  Array = "array",
+  Image = "image",
 }

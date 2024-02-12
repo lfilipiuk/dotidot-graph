@@ -1,4 +1,4 @@
-import { Entity } from "@/graph/types.ts";
+import { Entity } from "@/variable-map/types.ts";
 
 export function generateUniqueId(entity: Entity): string {
   if (entity.__typename === "DataSourceVariable") {

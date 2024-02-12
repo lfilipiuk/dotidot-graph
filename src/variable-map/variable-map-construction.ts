@@ -1,5 +1,5 @@
 import { Node } from "reactflow";
-import { Entity, NodeType } from "@/graph/types.ts";
+import { Entity, NodeType } from "@/variable-map/types.ts";
 
 export function createNode(entity: Entity, uniqueId: string): Node {
   const typeName = entity.__typename;

@@ -8,70 +8,65 @@ import {
   Megaphone,
   Presentation,
 } from "lucide-react";
-import { NodeType } from "@/graph/types.ts";
+import { NodeType, VariableType } from "@/variable-map/types.ts";
 
 interface IconProps {
   type: NodeType;
-  showValueType?: "text" | "number" | "date" | "array" | "image";
+  showValueType?: VariableType;
 }
 
+const valueTypeIcons = {
+  text: (
+    <div className="w-5 h-5 font-mono font-normal text-sm leading-5 text-center">
+      Aa
+    </div>
+  ),
+  number: (
+    <div className="w-5 h-5 font-mono font-normal text-sm leading-5 text-center">
+      01
+    </div>
+  ),
+  date: <CalendarDays strokeWidth={1.25} className="w-5 h-5 text-center" />,
+  array: (
+    <div className="w-5 h-5 font-mono font-normal text-sm leading-5 text-center">
+      []
+    </div>
+  ),
+  image: <Image strokeWidth={1.25} className="w-5 h-5 text-center" />,
+};
+
+const nodeTypeIcons = {
+  [NodeType.AdditionalSource]: (
+    <Database strokeWidth={1.25} className="w-5 text-center" />
+  ),
+  [NodeType.Campaign]: (
+    <Megaphone strokeWidth={1.25} className="w-5 h-5 text-center" />
+  ),
+  [NodeType.FeedExport]: (
+    <ExternalLink strokeWidth={1.25} className="w-5 h-5 text-center" />
+  ),
+  [NodeType.KeywordSetting]: (
+    <Key strokeWidth={1.25} className="w-5 h-5 text-center" />
+  ),
+  [NodeType.AdwordsSetting]: (
+    <Presentation strokeWidth={1.25} className="w-5 h-5 text-center" />
+  ),
+  [NodeType.BaseAdtext]: (
+    <div className="w-5 h-5 font-mono font-normal text-xs leading-5 text-center">
+      AD
+    </div>
+  ),
+  [NodeType.BidRule]: (
+    <Coins strokeWidth={1.25} className="w-5 h-5 text-center" />
+  ),
+  default: null,
+};
+
 const CustomNodeIcon = ({ type, showValueType }: IconProps) => {
-  switch (type) {
-    case NodeType.Variable:
-    case NodeType.Modifier:
-      switch (showValueType) {
-        case "text":
-          return (
-            <div className="w-5 h-5 font-mono font-normal text-sm leading-5 text-center">
-              Aa
-            </div>
-          );
-        case "number":
-          return (
-            <div className="w-5 h-5 font-mono font-normal text-sm leading-5 text-center">
-              01
-            </div>
-          );
-        case "date":
-          return (
-            <CalendarDays strokeWidth={1.25} className="w-5 h-5 text-center" />
-          );
-        case "array":
-          return (
-            <div className="w-5 h-5 font-mono font-normal text-sm leading-5 text-center">
-              []
-            </div>
-          );
-        case "image":
-          return <Image strokeWidth={1.25} className="w-5 h-5 text-center" />;
-        default:
-          return null;
-      }
-    case NodeType.AdditionalSource:
-      return <Database strokeWidth={1.25} className="w-5 text-center" />;
-    case NodeType.Campaign:
-      return <Megaphone strokeWidth={1.25} className="w-5 h-5 text-center" />;
-    case NodeType.FeedExport:
-      return (
-        <ExternalLink strokeWidth={1.25} className="w-5 h-5 text-center" />
-      );
-    case NodeType.KeywordSetting:
-      return <Key strokeWidth={1.25} className="w-5 h-5 text-center" />;
-    case NodeType.AdwordsSetting:
-      return (
-        <Presentation strokeWidth={1.25} className="w-5 h-5 text-center" />
-      );
-    case NodeType.BaseAdtext:
-      return (
-        <div className="w-5 h-5 font-mono font-normal text-xs leading-5 text-center">
-          AD
-        </div>
-      );
-    case NodeType.BidRule:
-      return <Coins strokeWidth={1.25} className="w-5 h-5 text-center" />;
-    default:
-      return null;
+  if (type === NodeType.Variable || type === NodeType.Modifier) {
+    return valueTypeIcons[showValueType as VariableType] || null;
   }
+  return nodeTypeIcons[type];
 };
 
 export default CustomNodeIcon;

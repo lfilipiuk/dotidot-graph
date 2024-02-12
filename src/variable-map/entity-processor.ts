@@ -1,13 +1,16 @@
-import { createEdge, createNode } from "@/graph/graph-construction.ts";
+import {
+  createEdge,
+  createNode,
+} from "@/variable-map/variable-map-construction.ts";
 import { Node, Edge } from "reactflow";
 import {
   Entity,
   EntityCollection,
   JsonData,
   ProcessedIds,
-} from "@/graph/types.ts";
-import { entityConfig } from "@/graph/utils/entityConfig.ts";
-import { generateUniqueId } from "@/graph/utils/generateUniqueId.ts";
+} from "@/variable-map/types.ts";
+import { entityConfig } from "@/variable-map/utils/entity-config.ts";
+import { generateUniqueId } from "@/variable-map/utils/generate-unique-id.ts";
 
 function processEntity(
   entity: Entity,
@@ -118,7 +121,7 @@ function processAsChain(
   );
 }
 
-export function processAllCollections(jsonData: JsonData): {
+export function processCollections(jsonData: JsonData): {
   nodes: Node[];
   edges: Edge[];
 } {
@@ -126,7 +129,7 @@ export function processAllCollections(jsonData: JsonData): {
   const edges: Edge[] = [];
   const processedIds: ProcessedIds = new Set<string>();
 
-  entityConfig.collections.forEach((collectionName) => {
+  entityConfig.collections.forEach((collectionName: string) => {
     const key = collectionName as keyof EntityCollection;
     const collectionEntities = jsonData.data[key]?.[key];
     if (Array.isArray(collectionEntities)) {
