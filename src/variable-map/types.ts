@@ -33,28 +33,7 @@ export interface Entity {
 
 export type ProcessedIds = Set<string>;
 
-export enum NodeType {
-  Variable = "variable",
-  Modifier = "modifier",
-  AdditionalSource = "additional-source",
-  Campaign = "campaign",
-  FeedExport = "feed-export",
-  KeywordSetting = "keyword-setting",
-  AdwordsSetting = "adwords-setting",
-  BaseAdtext = "base-adtext",
-  BidRule = "bid-rule",
-  Default = "default",
-}
-
 export interface ColorProps {
   border: string;
   background: string;
-}
-
-export enum VariableType {
-  Number = "number",
-  Text = "text",
-  Date = "date",
-  Array = "array",
-  Image = "image",
 }

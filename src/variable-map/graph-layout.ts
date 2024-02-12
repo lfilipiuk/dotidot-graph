@@ -1,6 +1,6 @@
 import { Node, Edge } from "reactflow";
-import { NodeType } from "@/variable-map/types";
 import { deepCloneObject } from "@/lib/utils.ts";
+import { EntityType, NodeType } from "@/variable-map/enums.ts";
 
 interface BasketConfig {
   rules: (
@@ -156,7 +156,8 @@ function applyWaterfallEffect(
   basket.forEach((node) => {
     const depth = adjustedDepths[node.id] || 0;
     maxDepth = Math.max(maxDepth, depth);
-    const xModifier = node.data.__typename === "BaseAdtext" ? 100 : 250;
+    const xModifier =
+      node.data.__typename === EntityType.BaseAdtext ? 100 : 250;
     node.position = { x: startX + depth * xModifier, y: currentY };
     currentY += 100;
   });

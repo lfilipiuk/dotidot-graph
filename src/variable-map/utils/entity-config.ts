@@ -1,22 +1,23 @@
-import { ColorProps, NodeType } from "@/variable-map/types.ts";
+import { ColorProps } from "@/variable-map/types.ts";
+import {EntityCollectionName, EntitySpecificProperty, NodeType} from "@/variable-map/enums.ts";
 
 export const entityConfig = {
   entitySpecificProperties: {
     CampaignSetting: [
-      "bidRules",
-      "baseAdtexts",
-      "keywordSettings",
-      "adwordsSetting",
+      EntitySpecificProperty.BidRules,
+      EntitySpecificProperty.BaseAdtexts,
+      EntitySpecificProperty.KeywordSettings,
+      EntitySpecificProperty.AdwordsSetting,
     ],
-    DataSourceVariable: ["additionalSource"],
+    DataSourceVariable: [EntitySpecificProperty.AdditionalSource],
     FeedExport: [],
     AdditionalSource: [],
   } as { [key: string]: string[] },
   collections: [
-    "variables",
-    "feedExports",
-    "additionalSources",
-    "campaignSettings",
+    EntityCollectionName.Variables,
+    EntityCollectionName.FeedExports,
+    EntityCollectionName.AdditionalSources,
+    EntityCollectionName.CampaignSettings,
   ],
 };
 

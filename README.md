@@ -30,29 +30,29 @@ The JSON data fetched contains multiple collections, and the code is prepared to
 #### processCollections
 It uses `entityConfig`, where we can specify shape of our data. If a new collection is needed, we can add it here. If, in addition to `bidRules, baseAdtexts, keywordSettings, adwordsSeting` we need to add `bingSetting`, we can just add it here.
 
-```javascript
-export const entityConfig = {  
-  entitySpecificProperties: {  
-    CampaignSetting: [  
-      "bidRules",  
-      "baseAdtexts",  
-      "keywordSettings",  
-      "adwordsSetting",  
-    ],  
-    DataSourceVariable: ["additionalSource"],  
-    FeedExport: [],  
-    AdditionalSource: [],  
-  } as { [key: string]: string[] },  
-  collections: [  
-    "variables",  
-    "feedExports",  
-    "additionalSources",  
-    "campaignSettings",  
-  ],  
+```
+export const entityConfig = {
+    entitySpecificProperties: {
+        CampaignSetting: [
+            EntitySpecificProperty.BidRules,
+            EntitySpecificProperty.BaseAdtexts,
+            EntitySpecificProperty.KeywordSettings,
+            EntitySpecificProperty.AdwordsSetting,
+        ],
+        DataSourceVariable: [EntitySpecificProperty.AdditionalSource],
+        FeedExport: [],
+        AdditionalSource: [],
+    } as { [key: string]: string[] },
+collections: [
+    EntityCollectionName.Variables,
+    EntityCollectionName.FeedExports,
+    EntityCollectionName.AdditionalSources,
+    EntityCollectionName.CampaignSettings,
+],
 };
 ```
 
-Function loops through specified collections and processes them using `procesEntities.
+Function loops through specified collections and processes them using `processEntities.
 
 #### processEntities
 This function loops through each specified in config and processes it using `processEntity`
@@ -115,14 +115,14 @@ Here, we handle scenarios for edge creation. Direction matters here.
 
 1. `AdditionalSource` entity may have a `mappingField`. It's mapped to a variable, so an appropriate edge is generated from that variable to this additional source.
 2. `AdditionalSource` may be nested in `DataSourceVariable` so function will receive `nestedEntityId` argument. Then, it creates an edge from that `AdditionalSource` to the `DataSourceVariable`.
-3. An entity may have `parentId`. If it does and it's different than `0` (meaning it's top level), it will create an edge to that parent. It assumes parent is the same type (use case for `BaseAdtext`.
+3. An entity may have `parentId`. If it does, and it's different from `0` (meaning it's top level), it will create an edge to that parent. It assumes parent is the same type (use case for `BaseAdtext`).
 4. Final use case is for any other nodes which have `nestedEntityId` which is not `DataSourceVariable` as these are handled separately. It just creates an edge.
 
 Then `processPlaceholders` runs. It created edges from `DataSourceVariable` entities to nodes of currently processed entity, by checking `genPlaceholdersWithoutConditions`, `getConditionsPlaceholders` and if entity contains `imageGen` it will check placeholders for it as well. Then it creates edges from variables to entities.
 
 ##### Recursion
 Now, recursion happens. `getEntitySpecificProperties` tells us, which properties within this entity type we should check. e.g. for `CampaignSetting` we will be checking below:
-```javascript
+```
 CampaignSetting: [  
   "bidRules",  
   "baseAdtexts",  
@@ -166,10 +166,10 @@ Edges and nodes are separate objects. Node doesn't know what edges it has. Edge 
 Nodes are put into baskets, according to rules specifies in the config.
 
 ##### calculateAdjustedDepths
-Now, depths are calculated. If node has a parent and parent is of the same type, we increate depth. We do it recursively.
+Now, depths are calculated. If node has a parent and parent is of the same type, we create depth. We do it recursively.
 
 ##### applyWaterfallEffect
-Each basket will now receive a separate waterfall effect. First nodes are sorted according to their type within the basket. Then, for each node in the basket we move it below the previous node and we move it to the right according to the depth.
+Each basket will now receive a separate waterfall effect. First nodes are sorted according to their type within the basket. Then, for each node in the basket we move it below the previous node, and we move it to the right according to the depth.
 
 There is a special use case here for `BaseAdtext`, where when moving horizontally, we move less than usual.
 

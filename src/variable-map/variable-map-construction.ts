@@ -1,5 +1,6 @@
 import { Node } from "reactflow";
-import { Entity, NodeType } from "@/variable-map/types.ts";
+import { Entity } from "@/variable-map/types.ts";
+import { EntityType, NodeType } from "@/variable-map/enums.ts";
 
 export function createNode(entity: Entity, uniqueId: string): Node {
   const typeName = entity.__typename;
@@ -38,28 +39,28 @@ export function createEdge({
 
 const getNodeType = (data: Entity): NodeType => {
   if (
-    data.__typename === "DataSourceVariable" &&
+    data.__typename === EntityType.DataSourceVariable &&
     data.id.toString().includes("DataField")
   ) {
     return NodeType.Variable;
   } else if (
-    data.__typename === "DataSourceVariable" &&
+    data.__typename === EntityType.DataSourceVariable &&
     data.id.toString().includes("Modifier")
   ) {
     return NodeType.Modifier;
-  } else if (data.__typename === "AdditionalSource") {
+  } else if (data.__typename === EntityType.AdditionalSource) {
     return NodeType.AdditionalSource;
-  } else if (data.__typename === "CampaignSetting") {
+  } else if (data.__typename === EntityType.CampaignSetting) {
     return NodeType.Campaign;
-  } else if (data.__typename === "FeedExport") {
+  } else if (data.__typename === EntityType.FeedExport) {
     return NodeType.FeedExport;
-  } else if (data.__typename === "KeywordSetting") {
+  } else if (data.__typename === EntityType.KeywordSetting) {
     return NodeType.KeywordSetting;
-  } else if (data.__typename === "AdwordsSetting") {
+  } else if (data.__typename === EntityType.AdwordsSetting) {
     return NodeType.AdwordsSetting;
-  } else if (data.__typename === "BaseAdtext") {
+  } else if (data.__typename === EntityType.BaseAdtext) {
     return NodeType.BaseAdtext;
-  } else if (data.__typename === "BidRule") {
+  } else if (data.__typename === EntityType.BidRule) {
     return NodeType.BidRule;
   }
   return NodeType.Default;
