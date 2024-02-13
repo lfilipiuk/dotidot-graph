@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 
 const Instructions: React.FC = () => {
   return (
@@ -52,6 +52,6 @@ const Instructions: React.FC = () => {
   );
 };
 
-const MemoizedInstructions = React.memo(Instructions);
+const MemoizedInstructions = memo(Instructions);
 
 export default MemoizedInstructions;
