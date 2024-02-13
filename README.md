@@ -25,13 +25,13 @@ Then it generates a layout.
 It returns `nodes, edges, setNodes, setEdges, isLoading, error`.
 
 ### JSON Conversion
-The JSON data fetched contains multiple collections, and the code is prepared to work with them by specifying collections in the `entityConfig`. The `processCollections` function iterates through these collections and processes each entity within them using `processEntities`. This function, in turn, recursively processes each entity using `processEntity`, generating a unique identifier for each entity and creating nodes and edges accordingly based on their type and relationships.
+The JSON data fetched contains multiple collections, and the code is prepared to work with them by specifying collections in the `entitiesToCreate`. The `processCollections` function iterates through these collections and processes each entity within them using `processEntities`. This function, in turn, recursively processes each entity using `processEntity`, generating a unique identifier for each entity and creating nodes and edges accordingly based on their type and relationships.
 
 #### processCollections
-It uses `entityConfig`, where we can specify shape of our data. If a new collection is needed, we can add it here. If, in addition to `bidRules, baseAdtexts, keywordSettings, adwordsSeting` we need to add `bingSetting`, we can just add it here.
+It uses `entitiesToCreate`, where we can specify shape of our data. If a new collection is needed, we can add it here. If, in addition to `bidRules, baseAdtexts, keywordSettings, adwordsSeting` we need to add `bingSetting`, we can just add it here.
 
 ```
-export const entityConfig = {
+export const entitiesToCreate = {
     entitySpecificProperties: {
         CampaignSetting: [
             EntitySpecificProperty.BidRules,
@@ -179,3 +179,8 @@ Finally, `generateLayout` function finishes and nodes are returned with their po
 
 ### Variable Map
 The `VariableMap` component, built on top of React Flow, extends its functionality to handle interactions within the variable map. It allows users to click on nodes or empty spaces within the map. Clicking on a node triggers functions to reset and highlight selected nodes, along with their connected edges and directly related nodes, providing a more interactive and intuitive exploration experience.
+
+## Final notes
+Such code splitting was to test the app better, since it's not possible to mock calls to methods that are called inside other methods of the same file.
+https://vitest.dev/guide/mocking.html#mocking-pitfalls
+

@@ -47,3 +47,5 @@ export interface Baskets {
     config: BasketConfig;
   };
 }
+
+export type ProcessedIds = Set<string>;
