@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useNodesState, useEdgesState } from "reactflow";
 import {processCollections} from "@/variable-map/variable-map-json-parser/process-collections.ts";
 import {generateLayout} from "@/variable-map/variable-map-layout-generator/generate-layout.ts";
-import {entitiesToCreate} from "@/variable-map/variable-map-json-parser/entities-to-create.ts";
 
 const fetchData = async () => {
   const demoUrl =
@@ -25,7 +24,7 @@ export function useVariableMap() {
     try {
       const jsonData = await fetchData();
       const { nodes: initialNodes, edges: initialEdges } =
-        processCollections(jsonData, entitiesToCreate);
+        processCollections(jsonData);
       const layoutedNodes = generateLayout(initialNodes, initialEdges);
 
       setNodes(layoutedNodes);

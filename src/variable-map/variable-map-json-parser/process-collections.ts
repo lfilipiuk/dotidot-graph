@@ -2,9 +2,9 @@ import {EntityCollection, JsonData, ProcessedIds} from "@/variable-map/types/typ
 import {Edge, Node} from "reactflow";
 
 import {processEntities} from "@/variable-map/variable-map-json-parser/process-entities.ts";
-import {EntitiesToCreate} from "@/variable-map/variable-map-json-parser/entities-to-create.ts";
+import {entitiesToCreate} from "@/variable-map/variable-map-json-parser/entities-to-create.ts";
 
-export function processCollections(jsonData: JsonData, entitiesToCreate: EntitiesToCreate): {
+export function processCollections(jsonData: JsonData): {
     nodes: Node[];
     edges: Edge[];
 } {

@@ -20,6 +20,7 @@ export function processEntity(
     edges: Edge[],
     processedIds: ProcessedIds,
 ) {
+
     const uniqueId = generateUniqueId(entity);
     const nodeAlreadyExists = processedIds.has(uniqueId);
 

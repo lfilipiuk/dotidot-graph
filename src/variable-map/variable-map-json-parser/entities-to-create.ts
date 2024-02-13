@@ -4,8 +4,10 @@ import {
 } from "@/variable-map/types/enums.ts";
 
 export interface EntitiesToCreate {
-  entitySpecificProperties: { [key: string]: string[] }; //Properties to loop through within each entity
-  collections: string[]; //Collections to loop through
+    entitySpecificProperties: {
+        [key: string]: EntitySpecificProperty[];
+    };
+    collections: EntityCollectionName[] | string[];
 }
 
 export const entitiesToCreate = {
@@ -26,4 +28,4 @@ export const entitiesToCreate = {
     EntityCollectionName.AdditionalSources,
     EntityCollectionName.CampaignSettings,
   ],
-};
+} as EntitiesToCreate;
