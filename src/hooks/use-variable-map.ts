@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNodesState, useEdgesState } from "reactflow";
-import { processCollections } from "@/variable-map/variable-map-json-parser.ts";
-import { generateLayout } from "@/variable-map/variable-map-layout.ts";
+import {processCollections} from "@/variable-map/variable-map-json-parser/process-collections.ts";
+import {generateLayout} from "@/variable-map/variable-map-layout-generator/generate-layout.ts";
 
 const fetchData = async () => {
   const demoUrl =

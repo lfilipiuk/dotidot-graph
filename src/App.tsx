@@ -28,7 +28,9 @@ const App = () => {
   return (
     <div className={"h-dvh"}>
       <NavBar />
-      <div className="h-5/6 border mx-5 rounded-xl shadow-sm flex items-center justify-center">{content}</div>
+      <div className="h-5/6 border mx-5 rounded-xl shadow-sm flex items-center justify-center">
+        {content}
+      </div>
     </div>
   );
 };
