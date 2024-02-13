@@ -1,21 +1,10 @@
 import { Node, Edge } from "reactflow";
 import { deepCloneObject } from "@/lib/utils.ts";
-import { EntityType, NodeType } from "@/variable-map/enums.ts";
+import { EntityType, NodeType } from "@/variable-map/types/enums.ts";
+import { Baskets } from "@/variable-map/types/types.ts";
 
-export interface BasketConfig {
-  rules: (
-    node: Node,
-    sourceTypesForNode: Record<string, Set<string>>,
-  ) => boolean;
-  startY: number;
-}
-
-export interface Baskets {
-  [key: string]: {
-    nodes: Node[];
-    config: BasketConfig;
-  };
-}
+const START_X = 100;
+const BASKET_SPACING = 20;
 
 //Initialize the baskets, set rules and Y position for each basket
 function initializeBaskets(): Baskets {
@@ -179,8 +168,8 @@ export function generateLayout(nodes: Node[], edges: Edge[]): Node[] {
     parentNodeIdForNode,
   );
 
-  let startX = 100;
-  const basketSpacing = 20;
+  let startX = START_X;
+  const basketSpacing = BASKET_SPACING;
 
   Object.keys(baskets).forEach((basketKey) => {
     const basket = baskets[basketKey];

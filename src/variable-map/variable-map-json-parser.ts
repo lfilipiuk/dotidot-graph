@@ -1,18 +1,97 @@
-import {
-  createEdge,
-  createNode,
-} from "@/variable-map/variable-map-construction.ts";
 import { Node, Edge } from "reactflow";
 import {
   Entity,
   EntityCollection,
   JsonData,
-} from "@/variable-map/types.ts";
-import { entityConfig } from "@/variable-map/utils/config.ts";
+} from "@/variable-map/types/types.ts";
 import { generateUniqueId } from "@/variable-map/utils/generate-unique-id.ts";
-import { EntitySpecificProperty, EntityType } from "@/variable-map/enums.ts";
+import {
+  EntityCollectionName,
+  EntitySpecificProperty,
+  EntityType,
+  NodeType,
+} from "@/variable-map/types/enums.ts";
 
 type ProcessedIds = Set<string>;
+
+const entityConfig = {
+  entitySpecificProperties: {
+    CampaignSetting: [
+      EntitySpecificProperty.BidRules,
+      EntitySpecificProperty.BaseAdtexts,
+      EntitySpecificProperty.KeywordSettings,
+      EntitySpecificProperty.AdwordsSetting,
+    ],
+    DataSourceVariable: [EntitySpecificProperty.AdditionalSource],
+    FeedExport: [],
+    AdditionalSource: [],
+  } as { [key: string]: string[] },
+  collections: [
+    EntityCollectionName.Variables,
+    EntityCollectionName.FeedExports,
+    EntityCollectionName.AdditionalSources,
+    EntityCollectionName.CampaignSettings,
+  ],
+};
+
+function createNode(entity: Entity, uniqueId: string): Node {
+  const typeName = entity.__typename;
+  const label = entity.name || typeName || entity.id.toString();
+  const type = getNodeType(entity);
+
+  return {
+    id: uniqueId,
+    type: "custom-node",
+    data: {
+      ...entity,
+      label: label,
+      type: type,
+    },
+    position: { x: 0, y: 0 },
+    width: 200,
+    height: 50,
+  };
+}
+
+function createEdge({ source, target }: { source: string; target: string }) {
+  return {
+    id: `edge-${source}-${target}`,
+    source: source,
+    target: target,
+    type: "default",
+    arrowHeadType: "arrowclosed",
+  };
+}
+
+const getNodeType = (data: Entity): NodeType => {
+  // Handle the special cases for DataSourceVariable with specific id patterns
+  if (data.__typename === EntityType.DataSourceVariable) {
+    if (data.id.toString().includes("DataField")) {
+      return NodeType.Variable;
+    } else if (data.id.toString().includes("Modifier")) {
+      return NodeType.Modifier;
+    }
+  }
+
+  switch (data.__typename) {
+    case EntityType.AdditionalSource:
+      return NodeType.AdditionalSource;
+    case EntityType.CampaignSetting:
+      return NodeType.Campaign;
+    case EntityType.FeedExport:
+      return NodeType.FeedExport;
+    case EntityType.KeywordSetting:
+      return NodeType.KeywordSetting;
+    case EntityType.AdwordsSetting:
+      return NodeType.AdwordsSetting;
+    case EntityType.BaseAdtext:
+      return NodeType.BaseAdtext;
+    case EntityType.BidRule:
+      return NodeType.BidRule;
+    default:
+      return NodeType.Default;
+  }
+};
 
 function processEntity(
   entity: Entity,
@@ -72,7 +151,7 @@ function processEntity(
     }
   }
 
-  processPlaceholders(entity, node, edges);
+  generateEdgesFromVariablesToEntity(entity, node, edges);
 
   const entityProperties = getEntitySpecificProperties(entity);
 
@@ -143,7 +222,7 @@ export function processCollections(jsonData: JsonData): {
   return { nodes, edges };
 }
 
-function processPlaceholders(entity: Entity, node: Node, edges: Edge[]): void {
+function generateEdgesFromVariablesToEntity(entity: Entity, node: Node, edges: Edge[]): void {
   const combinedPlaceholders = [
     ...(entity.getPlaceholdersWithoutConditions || []),
     ...(entity.getConditionsPlaceholders || []),

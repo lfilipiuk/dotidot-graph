@@ -1,14 +1,31 @@
 import { FC, memo } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 import CustomNodeIcon from "@/components/custom-node-icon.tsx";
-import { colorMapping } from "@/variable-map/utils/config.ts";
-import { NodeType, VariableType } from "@/variable-map/enums.ts";
+import { NodeType, VariableType } from "@/variable-map/types/enums.ts";
 
 interface CustomNodeData {
   label: string;
   type: NodeType;
   showValueType: VariableType;
 }
+
+interface ColorProps {
+  border: string;
+  background: string;
+}
+
+const colorMapping: Record<NodeType, ColorProps> = {
+  [NodeType.Variable]: { border: "#1E90FF", background: "#AFEEEE" },
+  [NodeType.Modifier]: { border: "#32CD32", background: "#98FB98" },
+  [NodeType.AdditionalSource]: { border: "#FFD700", background: "#FFFACD" },
+  [NodeType.Campaign]: { border: "#FF4500", background: "#FFA07A" },
+  [NodeType.FeedExport]: { border: "#DB7093", background: "#FFC0CB" },
+  [NodeType.KeywordSetting]: { border: "#6A5ACD", background: "#E6E6FA" },
+  [NodeType.AdwordsSetting]: { border: "#20B2AA", background: "#AFEEEE" },
+  [NodeType.BaseAdtext]: { border: "#BDB76B", background: "#F5F5DC" },
+  [NodeType.BidRule]: { border: "#9b15c7", background: "#e7b6ff" },
+  [NodeType.Default]: { border: "#808080", background: "#D3D3D3" },
+};
 
 const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data }) => {
   const label = data.label;

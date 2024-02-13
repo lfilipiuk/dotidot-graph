@@ -13,7 +13,7 @@ import { memo } from "react";
 function NavBar() {
   return (
     <div className={"flex gap-2 items-center justify-start pl-2"}>
-      <a href={"https://www.dotidot.io"}>
+      <a href={"https://www.dotidot.io"} aria-label="Go to Dotidot website">
         <Logo />
       </a>
       <NavigationMenu className={"p-2"}>
@@ -30,6 +30,7 @@ function NavBar() {
             <NavigationMenuLink
               href={"https://github.com/lfilipiuk/dotidot-graph"}
               className={navigationMenuTriggerStyle()}
+              aria-label={"Go to Graph GitHub repository for more information"}
             >
               Documentation
             </NavigationMenuLink>

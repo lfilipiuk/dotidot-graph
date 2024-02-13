@@ -1,3 +1,5 @@
+import {Node} from "reactflow";
+
 export interface JsonData {
   data: EntityCollection;
 }
@@ -29,4 +31,19 @@ export interface Entity {
     getConditionsPlaceholders: string[];
   } | null;
   [key: string]: unknown;
+}
+
+export interface BasketConfig {
+  rules: (
+      node: Node,
+      sourceTypesForNode: Record<string, Set<string>>,
+  ) => boolean;
+  startY: number;
+}
+
+export interface Baskets {
+  [key: string]: {
+    nodes: Node[];
+    config: BasketConfig;
+  };
 }

@@ -118,7 +118,7 @@ Here, we handle scenarios for edge creation. Direction matters here.
 3. An entity may have `parentId`. If it does, and it's different from `0` (meaning it's top level), it will create an edge to that parent. It assumes parent is the same type (use case for `BaseAdtext`).
 4. Final use case is for any other nodes which have `nestedEntityId` which is not `DataSourceVariable` as these are handled separately. It just creates an edge.
 
-Then `processPlaceholders` runs. It created edges from `DataSourceVariable` entities to nodes of currently processed entity, by checking `genPlaceholdersWithoutConditions`, `getConditionsPlaceholders` and if entity contains `imageGen` it will check placeholders for it as well. Then it creates edges from variables to entities.
+Then `generateEdgesFromVariablesToEntity` runs. It creates edges from `DataSourceVariable` entities to nodes of currently processed entity, by checking `genPlaceholdersWithoutConditions`, `getConditionsPlaceholders` and if entity contains `imageGen` it will check placeholders for it as well. Then it creates edges from variables to entities.
 
 ##### Recursion
 Now, recursion happens. `getEntitySpecificProperties` tells us, which properties within this entity type we should check. e.g. for `CampaignSetting` we will be checking below:
