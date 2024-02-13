@@ -34,7 +34,7 @@ const entityConfig = {
   ],
 };
 
-function createNode(entity: Entity, uniqueId: string): Node {
+export function createNode(entity: Entity, uniqueId: string): Node {
   const typeName = entity.__typename;
   const label = entity.name || typeName || entity.id.toString();
   const type = getNodeType(entity);
@@ -53,7 +53,7 @@ function createNode(entity: Entity, uniqueId: string): Node {
   };
 }
 
-function createEdge({ source, target }: { source: string; target: string }) {
+export function createEdge({ source, target }: { source: string; target: string }) {
   return {
     id: `edge-${source}-${target}`,
     source: source,
@@ -93,13 +93,14 @@ const getNodeType = (data: Entity): NodeType => {
   }
 };
 
-function processEntity(
+export function processEntity(
   entity: Entity,
   nestedEntityId: string | null,
   nodes: Node[],
   edges: Edge[],
   processedIds: ProcessedIds,
 ) {
+
   const uniqueId = generateUniqueId(entity);
   const nodeAlreadyExists = processedIds.has(uniqueId);
 
